@@ -1115,7 +1115,7 @@ async function analyzeResume() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         system: `You are a professional resume coach and hiring expert with 20 years of experience across tech, finance, healthcare, and consulting industries. Score resumes rigorously and give actionable advice. Respond ONLY with a valid JSON object — no markdown, no code fences, no preamble.`,
         messages: [{ role: 'user', content: buildPrompt(resumeTxt, role, level, geo, jd) }]
