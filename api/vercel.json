@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "api/analyze.js": {
+      "maxDuration": 30
+    },
+    "api/usage.js": {
+      "maxDuration": 10
+    }
+  },
+  "api": {
+    "bodyParser": {
+      "sizeLimit": "10mb"
+    }
+  }
+}
