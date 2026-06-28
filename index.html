@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ResumeIQ — AI-Powered Resume Validator & Scorer</title>
+<title>ResumeStrength — AI-Powered Resume Validator & Scorer</title>
 <meta name="description" content="Get your resume scored out of 100 by AI. Tailored feedback for your target role, experience level, and geography.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 
-<!-- GOOGLE IDENTITY SERVICES (Gmail Login) -->
+<!-- GOOGLE IDENTITY SERVICES -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <!-- GOOGLE ADS — uncomment & replace Publisher ID after AdSense approval -->
 <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 
-<!-- RAZORPAY — uncomment after creating account at razorpay.com -->
+<!-- RAZORPAY — uncomment after KYC approval at razorpay.com -->
 <!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
 
 <style>
@@ -34,188 +34,87 @@
   --font-body: 'DM Sans', sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.6;
-  min-height: 100vh;
-}
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6; min-height: 100vh; }
 body::before {
-  content: '';
-  position: fixed; inset: 0;
+  content: ''; position: fixed; inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none; z-index: 0; opacity: .5;
 }
 
 /* ══ LOGIN WALL ══ */
-#loginWall {
-  position: fixed; inset: 0;
-  background: var(--bg);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.login-box {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 52px 44px;
-  max-width: 420px;
-  width: 100%;
-  text-align: center;
-  animation: popIn .4s cubic-bezier(.34,1.56,.64,1);
-}
-.login-logo {
-  font-family: var(--font-head);
-  font-size: 28px; font-weight: 800; letter-spacing: -.5px;
-  margin-bottom: 8px;
-}
+#loginWall { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.login-box { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 48px 40px; max-width: 440px; width: 100%; text-align: center; animation: popIn .4s cubic-bezier(.34,1.56,.64,1); }
+.login-logo { font-family: var(--font-head); font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
 .login-logo span { color: var(--accent); }
-.login-tagline { color: var(--muted); font-size: 14px; margin-bottom: 36px; font-weight: 300; }
-.login-title {
-  font-family: var(--font-head);
-  font-size: 22px; font-weight: 700; letter-spacing: -.3px;
-  margin-bottom: 8px;
-}
-.login-sub { color: var(--muted); font-size: 13px; margin-bottom: 32px; line-height: 1.5; }
-.login-perks {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px 20px;
-  margin-bottom: 28px;
-  text-align: left;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.login-perk { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-.login-perk-icon { font-size: 16px; flex-shrink: 0; }
+.login-tagline { color: var(--muted); font-size: 14px; margin-bottom: 28px; font-weight: 300; }
+.login-title { font-family: var(--font-head); font-size: 20px; font-weight: 700; letter-spacing: -.3px; margin-bottom: 6px; }
+.login-sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; line-height: 1.5; }
+.login-perks { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 22px; text-align: left; display: flex; flex-direction: column; gap: 9px; }
+.login-perk { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+.login-perk-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
 
-/* Google Sign-In button wrapper */
-.google-btn-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 16px;
+/* Privacy consent block on login */
+.login-privacy {
+  background: rgba(0,229,160,.04); border: 1px solid rgba(0,229,160,.15);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; text-align: left;
 }
-/* Fallback manual button (shown if GIS doesn't render) */
+.login-privacy-title { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.login-privacy ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.login-privacy ul li { font-size: 11px; color: var(--muted); display: flex; gap: 7px; line-height: 1.4; }
+.login-privacy ul li::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+.google-btn-wrap { display: flex; justify-content: center; margin-bottom: 14px; }
 .btn-google-fallback {
   display: flex; align-items: center; justify-content: center; gap: 12px;
-  width: 100%; padding: 13px 20px;
-  background: #fff; color: #1f2937;
+  width: 100%; padding: 13px 20px; background: #fff; color: #1f2937;
   border: 1px solid #d1d5db; border-radius: 10px;
   font-family: var(--font-body); font-size: 15px; font-weight: 600;
-  cursor: pointer;
-  transition: box-shadow .2s, background .2s;
+  cursor: pointer; transition: box-shadow .2s, background .2s;
 }
 .btn-google-fallback:hover { background: #f9fafb; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 .btn-google-fallback img { width: 20px; height: 20px; }
-.login-note { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.login-note { font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 14px; }
 .login-note a { color: var(--accent); text-decoration: none; }
+.login-note a:hover { text-decoration: underline; }
 
 /* ══ LAYOUT ══ */
-.page-wrap {
-  display: grid;
-  grid-template-columns: 1fr min(820px, 100%) 1fr;
-  gap: 0 24px;
-  position: relative; z-index: 1;
-}
+.page-wrap { display: grid; grid-template-columns: 1fr min(820px,100%) 1fr; gap: 0 24px; position: relative; z-index: 1; }
 .page-wrap > * { grid-column: 2; }
 
 /* ══ HEADER ══ */
-header {
-  padding: 20px 0 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
+header { padding: 20px 0 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
 .logo { font-family: var(--font-head); font-size: 22px; font-weight: 800; letter-spacing: -.5px; color: var(--text); text-decoration: none; }
 .logo span { color: var(--accent); }
-
-/* User avatar area */
 .header-right { display: flex; align-items: center; gap: 10px; }
-.user-chip {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 100px; padding: 5px 12px 5px 5px;
-  font-size: 13px;
-}
-.user-avatar {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: var(--accent); color: #0a0c10;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; overflow: hidden; flex-shrink: 0;
-}
+.user-chip { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 5px 12px 5px 5px; }
+.user-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #0a0c10; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; overflow: hidden; flex-shrink: 0; }
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .user-name { font-size: 12px; font-weight: 500; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.btn-signout {
-  background: none; border: 1px solid var(--border); border-radius: 8px;
-  color: var(--muted); font-size: 11px; padding: 5px 10px; cursor: pointer;
-  transition: color .2s, border-color .2s; font-family: var(--font-body);
-}
+.btn-signout { background: none; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: 11px; padding: 5px 10px; cursor: pointer; transition: color .2s, border-color .2s; font-family: var(--font-body); }
 .btn-signout:hover { color: #ef4444; border-color: rgba(239,68,68,.3); }
-
-/* Usage pill */
-.usage-pill {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 100px; padding: 5px 12px; font-size: 12px;
-}
+.usage-pill { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 5px 12px; }
 .usage-dots { display: flex; gap: 5px; }
 .usage-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background .3s; }
 .usage-dot.used { background: var(--accent); }
 .usage-text { font-size: 11px; color: var(--muted); }
-.btn-upgrade-small {
-  background: linear-gradient(135deg, var(--gold), #f97316);
-  color: #0a0c10; border: none; border-radius: 100px;
-  padding: 4px 12px; font-size: 11px; font-weight: 700;
-  cursor: pointer; letter-spacing: .3px; transition: opacity .2s;
-}
+.btn-upgrade-small { background: linear-gradient(135deg,var(--gold),#f97316); color: #0a0c10; border: none; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: .3px; transition: opacity .2s; }
 .btn-upgrade-small:hover { opacity: .85; }
 
 /* ══ HERO ══ */
 .hero { padding: 52px 0 32px; text-align: center; }
-.hero h1 {
-  font-family: var(--font-head);
-  font-size: clamp(32px, 6vw, 58px); font-weight: 800;
-  line-height: 1.08; letter-spacing: -2px; margin-bottom: 14px;
-}
-.hero h1 em {
-  font-style: normal;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
+.hero h1 { font-family: var(--font-head); font-size: clamp(32px,6vw,58px); font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 14px; }
+.hero h1 em { font-style: normal; background: linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .hero p { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto; font-weight: 300; }
-.hero-free-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(0,229,160,.08); border: 1px solid rgba(0,229,160,.2);
-  color: var(--accent); border-radius: 100px;
-  padding: 5px 14px; font-size: 12px; font-weight: 600;
-  letter-spacing: .5px; margin-bottom: 18px;
-}
+.hero-free-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,229,160,.08); border: 1px solid rgba(0,229,160,.2); color: var(--accent); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; letter-spacing: .5px; margin-bottom: 18px; }
 
 /* ══ AD SLOT ══ */
-.ad-slot {
-  background: var(--surface); border: 1px dashed var(--border);
-  border-radius: var(--radius);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--muted); font-size: 12px; letter-spacing: .5px; text-transform: uppercase;
-}
+.ad-slot { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; letter-spacing: .5px; text-transform: uppercase; }
 .ad-slot.leaderboard { height: 90px; margin: 8px 0 28px; }
 .ad-slot.rectangle   { height: 250px; margin: 24px 0; }
 
 /* ══ FORM CARD ══ */
-.form-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 20px; padding: 34px 38px; margin-bottom: 28px;
-}
-.section-title {
-  font-family: var(--font-head);
-  font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 22px;
-  display: flex; align-items: center; gap: 8px;
-}
+.form-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 34px 38px; margin-bottom: 28px; }
+.section-title { font-family: var(--font-head); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 22px; display: flex; align-items: center; gap: 8px; }
 .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -223,63 +122,48 @@ header {
 label { font-size: 11px; font-weight: 600; letter-spacing: .5px; color: var(--muted); text-transform: uppercase; }
 label .opt { color: #3d4452; font-weight: 400; }
 label .rec { color: var(--accent2); font-weight: 400; }
-input[type=text], select, textarea {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  color: var(--text); font-family: var(--font-body); font-size: 14px;
-  padding: 11px 14px; width: 100%;
-  transition: border-color .2s, box-shadow .2s; outline: none; resize: vertical;
-}
-input[type=text]:focus, select:focus, textarea:focus {
-  border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,160,.08);
-}
+input[type=text], select, textarea { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: var(--font-body); font-size: 14px; padding: 11px 14px; width: 100%; transition: border-color .2s, box-shadow .2s; outline: none; resize: vertical; }
+input[type=text]:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,160,.08); }
 select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
 
 /* File upload */
-.file-drop {
-  background: var(--surface); border: 1.5px dashed var(--border); border-radius: 12px;
-  padding: 28px 20px; text-align: center; cursor: pointer;
-  transition: border-color .2s, background .2s; position: relative;
-}
+.file-drop { background: var(--surface); border: 1.5px dashed var(--border); border-radius: 12px; padding: 28px 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
 .file-drop:hover, .file-drop.drag { border-color: var(--accent); background: rgba(0,229,160,.04); }
 .file-drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .file-drop .icon { font-size: 28px; margin-bottom: 6px; }
 .file-drop .label { font-size: 14px; font-weight: 500; color: var(--text); }
 .file-drop .sublabel { font-size: 12px; color: var(--muted); margin-top: 3px; }
-.file-name { margin-top: 8px; font-size: 13px; color: var(--accent); font-weight: 500; }
+.file-name-display { margin-top: 8px; font-size: 13px; color: var(--accent); font-weight: 500; }
+
+/* Privacy notice above button */
+.privacy-notice {
+  background: rgba(0,229,160,.04); border: 1px solid rgba(0,229,160,.15);
+  border-radius: 12px; padding: 16px 18px; margin-top: 18px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.privacy-notice-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.privacy-notice-body { flex: 1; }
+.privacy-notice-title { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.privacy-points { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.privacy-points li { font-size: 12px; color: var(--muted); display: flex; align-items: flex-start; gap: 7px; line-height: 1.5; }
+.privacy-points li::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.privacy-points li a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.privacy-points li a:hover { text-decoration: underline; }
 
 /* Analyze button */
-.btn-analyze {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 15px;
-  background: linear-gradient(135deg, var(--accent), #00c47a);
-  color: #0a0c10; font-family: var(--font-head); font-size: 16px; font-weight: 700;
-  border: none; border-radius: 12px; cursor: pointer; margin-top: 22px;
-  transition: opacity .2s, transform .1s;
-}
+.btn-analyze { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; background: linear-gradient(135deg,var(--accent),#00c47a); color: #0a0c10; font-family: var(--font-head); font-size: 16px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; margin-top: 16px; transition: opacity .2s, transform .1s; }
 .btn-analyze:hover:not(:disabled) { opacity: .9; transform: translateY(-1px); }
 .btn-analyze:disabled { opacity: .5; cursor: not-allowed; }
-.btn-analyze .spinner {
-  width: 17px; height: 17px;
-  border: 2px solid rgba(0,0,0,.3); border-top-color: #000;
-  border-radius: 50%; animation: spin .7s linear infinite; display: none;
-}
+.btn-analyze .spinner { width: 17px; height: 17px; border: 2px solid rgba(0,0,0,.3); border-top-color: #000; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
 .btn-analyze.loading .spinner { display: block; }
 .btn-analyze.loading .btn-text { opacity: .7; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* Error box */
-.error-box {
-  background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25);
-  border-radius: var(--radius); padding: 13px 16px; color: #ef4444;
-  font-size: 13px; display: none; margin-top: 12px;
-}
+.error-box { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25); border-radius: var(--radius); padding: 13px 16px; color: #ef4444; font-size: 13px; display: none; margin-top: 12px; }
 
 /* Usage bar */
-.usage-bar {
-  margin-top: 14px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-}
+.usage-bar { margin-top: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .usage-bar-left { display: flex; align-items: center; gap: 10px; }
 .usage-bar-dots { display: flex; gap: 6px; }
 .usage-bar-dot { width: 10px; height: 10px; border-radius: 50%; transition: background .3s; }
@@ -289,118 +173,60 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 .usage-bar-text strong { color: var(--text); }
 
 /* ══ UPGRADE MODAL ══ */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.75); backdrop-filter: blur(6px);
-  z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
-}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
-.modal {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 24px; padding: 40px 36px;
-  max-width: 460px; width: 100%; text-align: center;
-  animation: popIn .35s cubic-bezier(.34,1.56,.64,1);
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
-}
+.modal { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 40px 36px; max-width: 460px; width: 100%; text-align: center; animation: popIn .35s cubic-bezier(.34,1.56,.64,1); position: relative; max-height: 90vh; overflow-y: auto; }
 @keyframes popIn { from { opacity:0; transform: scale(.88); } to { opacity:1; transform: scale(1); } }
-.modal-close {
-  position: absolute; top: 16px; right: 18px;
-  background: none; border: none; color: var(--muted);
-  font-size: 20px; cursor: pointer; padding: 4px; transition: color .2s;
-}
+.modal-close { position: absolute; top: 16px; right: 18px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; transition: color .2s; }
 .modal-close:hover { color: var(--text); }
 .modal-lock { font-size: 44px; margin-bottom: 12px; }
 .modal h2 { font-family: var(--font-head); font-size: 26px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
-.modal-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
-.plan-card {
-  background: var(--surface); border: 2px solid var(--gold);
-  border-radius: 18px; padding: 24px 20px; margin-bottom: 18px;
-  position: relative; overflow: hidden;
-}
-.plan-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(245,158,11,.06), transparent);
-}
-.plan-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, var(--gold), #f97316);
-  color: #0a0c10; font-size: 10px; font-weight: 800;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  padding: 3px 10px; border-radius: 100px; margin-bottom: 12px;
-}
+.modal-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
+.plan-card { background: var(--surface); border: 2px solid var(--gold); border-radius: 18px; padding: 24px 20px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.plan-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg,rgba(245,158,11,.06),transparent); pointer-events: none; }
+.plan-badge { display: inline-block; background: linear-gradient(135deg,var(--gold),#f97316); color: #0a0c10; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 12px; }
 .plan-price { font-family: var(--font-head); font-size: 52px; font-weight: 800; letter-spacing: -3px; color: var(--text); line-height: 1; }
 .plan-price sup { font-size: 22px; letter-spacing: 0; vertical-align: super; }
 .plan-price sub { font-size: 16px; letter-spacing: 0; color: var(--muted); font-weight: 400; }
-.plan-desc { font-size: 13px; color: var(--muted); margin-top: 6px; margin-bottom: 16px; }
-.plan-features { list-style: none; text-align: left; display: flex; flex-direction: column; gap: 8px; }
+.plan-desc { font-size: 13px; color: var(--muted); margin-top: 6px; margin-bottom: 14px; }
+.plan-features { list-style: none; text-align: left; display: flex; flex-direction: column; gap: 7px; }
 .plan-features li { font-size: 13px; display: flex; align-items: center; gap: 8px; }
 .plan-features li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
-.btn-pay {
-  width: 100%; padding: 15px;
-  background: linear-gradient(135deg, var(--gold), #f97316);
-  color: #0a0c10; font-family: var(--font-head);
-  font-size: 16px; font-weight: 800;
-  border: none; border-radius: 12px; cursor: pointer; margin-top: 4px;
-  transition: opacity .2s, transform .1s;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
+.btn-pay { width: 100%; padding: 15px; background: linear-gradient(135deg,var(--gold),#f97316); color: #0a0c10; font-family: var(--font-head); font-size: 16px; font-weight: 800; border: none; border-radius: 12px; cursor: pointer; margin-top: 14px; transition: opacity .2s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .btn-pay:hover { opacity: .9; transform: translateY(-1px); }
 .modal-note { font-size: 11px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
-.access-code-wrap { display: flex; gap: 8px; margin-top: 14px; }
-.access-code-wrap input {
-  flex: 1; background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; color: var(--text); font-family: var(--font-body);
-  font-size: 13px; padding: 9px 12px; outline: none; transition: border-color .2s;
-}
+.access-code-wrap { display: flex; gap: 8px; margin-top: 10px; }
+.access-code-wrap input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 13px; padding: 9px 12px; outline: none; transition: border-color .2s; }
 .access-code-wrap input:focus { border-color: var(--accent); }
-.btn-activate {
-  background: var(--surface); border: 1px solid var(--accent);
-  color: var(--accent); font-size: 13px; font-weight: 600;
-  border-radius: 8px; padding: 9px 14px; cursor: pointer;
-  transition: background .2s; white-space: nowrap;
-}
+.btn-activate { background: var(--surface); border: 1px solid var(--accent); color: var(--accent); font-size: 13px; font-weight: 600; border-radius: 8px; padding: 9px 14px; cursor: pointer; transition: background .2s; white-space: nowrap; }
 .btn-activate:hover { background: rgba(0,229,160,.08); }
 .access-msg { font-size: 12px; margin-top: 6px; display: none; }
 .access-msg.ok  { color: var(--accent); display: block; }
 .access-msg.err { color: #ef4444; display: block; }
 
 /* Pro banner */
-.pro-banner {
-  background: linear-gradient(135deg, rgba(245,158,11,.12), rgba(249,115,22,.08));
-  border: 1px solid rgba(245,158,11,.3); border-radius: 12px;
-  padding: 12px 18px; display: none; align-items: center;
-  justify-content: space-between; gap: 12px; margin-top: 14px; font-size: 13px;
-}
+.pro-banner { background: linear-gradient(135deg,rgba(245,158,11,.12),rgba(249,115,22,.08)); border: 1px solid rgba(245,158,11,.3); border-radius: 12px; padding: 12px 18px; display: none; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; font-size: 13px; }
 .pro-banner.show { display: flex; }
 .pro-banner-left { display: flex; align-items: center; gap: 8px; color: var(--gold); font-weight: 600; }
 .pro-banner-expiry { font-size: 11px; color: var(--muted); }
 
+/* Toast */
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--card); border: 1px solid var(--border); border-radius: 100px; padding: 12px 22px; font-size: 13px; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,.4); z-index: 9999; opacity: 0; transition: opacity .3s, transform .3s; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 /* ══ RESULTS ══ */
 #results { display: none; animation: fadeUp .5s ease; }
 @keyframes fadeUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
-.score-hero {
-  background: var(--card); border: 1px solid var(--border); border-radius: 20px;
-  padding: 36px; display: grid; grid-template-columns: auto 1fr;
-  gap: 36px; align-items: center; margin-bottom: 22px;
-}
+.score-hero { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px; display: grid; grid-template-columns: auto 1fr; gap: 36px; align-items: center; margin-bottom: 22px; }
 .score-ring-wrap { position: relative; width: 155px; height: 155px; flex-shrink: 0; }
 .score-ring-wrap svg { transform: rotate(-90deg); }
-.score-ring-center {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
+.score-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .score-num { font-family: var(--font-head); font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -2px; }
 .score-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 .score-summary h2 { font-family: var(--font-head); font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing: -.5px; }
 .score-summary p { color: var(--muted); font-size: 14px; }
-.score-tier {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-  padding: 4px 12px; border-radius: 100px; margin-bottom: 10px;
-}
-.sub-scores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px; }
+.score-tier { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 10px; }
+.sub-scores { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 22px; }
 .sub-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 14px; }
 .sub-card .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
 .sub-card .s-score { font-family: var(--font-head); font-size: 26px; font-weight: 800; }
@@ -410,18 +236,15 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 .feedback-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
 .fp-title { font-family: var(--font-head); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 .improvement-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
-.improvement-item {
-  background: var(--card); border: 1px solid var(--border);
-  border-left: 3px solid var(--warn); border-radius: var(--radius); padding: 16px 18px;
-}
-.improvement-item.high { border-left-color: #ef4444; }
+.improvement-item { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--warn); border-radius: var(--radius); padding: 16px 18px; }
+.improvement-item.high   { border-left-color: #ef4444; }
 .improvement-item.medium { border-left-color: var(--warn); }
-.improvement-item.low { border-left-color: #eab308; }
+.improvement-item.low    { border-left-color: #eab308; }
 .imp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
 .imp-priority { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
-.imp-priority.high { background: rgba(239,68,68,.15); color: #ef4444; }
+.imp-priority.high   { background: rgba(239,68,68,.15);  color: #ef4444; }
 .imp-priority.medium { background: rgba(255,107,53,.15); color: var(--warn); }
-.imp-priority.low { background: rgba(234,179,8,.15); color: #eab308; }
+.imp-priority.low    { background: rgba(234,179,8,.15);  color: #eab308; }
 .imp-title { font-weight: 600; font-size: 14px; }
 .imp-why { font-size: 13px; color: var(--muted); line-height: 1.5; }
 .strength-list { display: flex; flex-direction: column; gap: 7px; }
@@ -429,57 +252,88 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 .strength-item::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
 .keyword-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
 .kw-tag { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 6px; }
-.kw-tag.found  { background: rgba(0,229,160,.12); color: var(--accent); border: 1px solid rgba(0,229,160,.2); }
-.kw-tag.missing{ background: rgba(239,68,68,.1);  color: #ef4444; border: 1px solid rgba(239,68,68,.2); }
+.kw-tag.found   { background: rgba(0,229,160,.12);  color: var(--accent); border: 1px solid rgba(0,229,160,.2); }
+.kw-tag.missing { background: rgba(239,68,68,.1);   color: #ef4444; border: 1px solid rgba(239,68,68,.2); }
 
+/* ══ PRIVACY POLICY MODAL ══ */
+.privacy-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); backdrop-filter: blur(6px); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+.privacy-modal-overlay.open { display: flex; }
+.privacy-modal { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 40px 36px; max-width: 620px; width: 100%; max-height: 88vh; overflow-y: auto; animation: popIn .35s cubic-bezier(.34,1.56,.64,1); position: relative; }
+.privacy-modal h2 { font-family: var(--font-head); font-size: 24px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 4px; }
+.pm-date { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+.pm-highlight { background: rgba(0,229,160,.06); border: 1px solid rgba(0,229,160,.15); border-radius: 10px; padding: 14px 16px; margin-bottom: 24px; font-size: 13px; color: var(--text); line-height: 1.6; }
+.pm-highlight strong { color: var(--accent); }
+.pm-section { margin-bottom: 22px; }
+.pm-section h3 { font-family: var(--font-head); font-size: 13px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.pm-section p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 6px; }
+.pm-section ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.pm-section ul li { font-size: 13px; color: var(--muted); display: flex; gap: 8px; line-height: 1.5; }
+.pm-section ul li::before { content: '•'; color: var(--accent); flex-shrink: 0; }
+.pm-close { position: absolute; top: 16px; right: 18px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; transition: color .2s; }
+.pm-close:hover { color: var(--text); }
+
+/* ══ FOOTER ══ */
 footer { text-align: center; padding: 28px 0 36px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 36px; }
 footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
 
+/* ══ RESPONSIVE ══ */
 @media (max-width: 720px) {
   .form-card { padding: 22px 18px; }
   .form-grid { grid-template-columns: 1fr; }
   .score-hero { grid-template-columns: 1fr; text-align: center; }
   .score-ring-wrap { margin: 0 auto; }
   .sub-scores { grid-template-columns: 1fr 1fr; }
-  .feedback-grid { grid-template-columns: 1fr; }
+  .feedback-grid { grid-column: 1fr; }
   .hero h1 { letter-spacing: -1px; }
   .modal { padding: 30px 22px; }
-  .login-box { padding: 36px 24px; }
+  .login-box { padding: 36px 22px; }
+  .privacy-modal { padding: 30px 20px; }
   .user-name { display: none; }
+  .toast { white-space: normal; text-align: center; border-radius: 14px; max-width: 90vw; }
 }
 </style>
 </head>
 <body>
 
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
 <!-- ══ LOGIN WALL ══ -->
 <div id="loginWall">
   <div class="login-box">
-    <div class="login-logo"><span>Resume</span>IQ</div>
-    <div class="login-tagline">AI-powered resume scoring in 30 seconds</div>
-
+    <div class="login-logo"><span>Resume</span>Strength</div>
+    <div class="login-tagline">AI-powered resume scoring in seconds</div>
     <div class="login-title">Sign in to get started</div>
-    <div class="login-sub">Your usage is tracked per account — so your 2 free analyses stay with you across any device or browser.</div>
+    <div class="login-sub">2 free analyses every day. Your usage count is tied to your Google account — works the same on every browser, device, and incognito mode.</div>
 
     <div class="login-perks">
       <div class="login-perk"><span class="login-perk-icon">🎯</span> Score out of 100 with detailed breakdown</div>
-      <div class="login-perk"><span class="login-perk-icon">🔧</span> Exact fixes with What / Why / How</div>
+      <div class="login-perk"><span class="login-perk-icon">🔧</span> Exact fixes — What, Why and How</div>
       <div class="login-perk"><span class="login-perk-icon">🔑</span> Keyword gap vs the job description</div>
       <div class="login-perk"><span class="login-perk-icon">⚙️</span> ATS compatibility check</div>
-      <div class="login-perk"><span class="login-perk-icon">✦</span> 2 free analyses daily · Basic ₹19 · Pro ₹49</div>
+      <div class="login-perk"><span class="login-perk-icon">✦</span> 2 free daily · Basic ₹19 · Pro ₹49</div>
     </div>
 
-    <!-- Google One Tap / Sign-In button rendered here by GIS -->
-    <div class="google-btn-wrap" id="googleBtnContainer"></div>
+    <div class="login-privacy">
+      <div class="login-privacy-title">🔒 Your Privacy — Before You Sign In</div>
+      <ul>
+        <li>We receive only your name, email and profile photo from Google — nothing else</li>
+        <li>Your resume is never stored on our servers at any point</li>
+        <li>All data is encrypted using HTTPS during transmission</li>
+        <li>We never sell or share your personal information with anyone</li>
+      </ul>
+    </div>
 
-    <!-- Fallback button shown while GIS loads -->
+    <div class="google-btn-wrap" id="googleBtnContainer"></div>
     <button class="btn-google-fallback" id="googleFallbackBtn" onclick="triggerGoogleSignIn()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
       Continue with Google
     </button>
 
-    <p class="login-note" style="margin-top:16px">
-      By signing in you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.<br>
-      We only read your name, email, and profile photo — nothing else.
+    <p class="login-note">
+      By signing in you agree to our <a href="#" onclick="openPrivacyModal(event)">Privacy Policy</a> and <a href="#" onclick="openPrivacyModal(event)">Terms of Use</a>.<br>
+      Your resume is processed by AI and is <strong style="color:var(--accent)">never stored</strong> on our servers.
     </p>
   </div>
 </div>
@@ -490,11 +344,11 @@ footer a { color: var(--accent); text-decoration: none; }
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-lock">🔒</div>
     <h2>You've Used Your<br>2 Free Analyses</h2>
-    <p class="modal-sub">Choose a Day Pass to continue. Valid for <strong>24 hours</strong> from purchase. One-time payment — no subscription.</p>
+    <p class="modal-sub">Choose a Day Pass to continue. Valid for <strong>24 hours</strong> from purchase. One-time payment — no subscription trap.</p>
 
-    <!-- BASIC PLAN ₹19 -->
-    <div class="plan-card" style="margin-bottom:12px">
-      <div class="plan-badge" style="background:linear-gradient(135deg,var(--gold),#f97316)">⚡ Basic Plan</div>
+    <!-- BASIC PLAN -->
+    <div class="plan-card">
+      <div class="plan-badge">⚡ Basic Plan</div>
       <div class="plan-price"><sup>₹</sup>19<sub>/day</sub></div>
       <div class="plan-desc">10 analyses · Valid 24 hours from purchase</div>
       <ul class="plan-features">
@@ -504,12 +358,11 @@ footer a { color: var(--accent); text-decoration: none; }
         <li>ATS compatibility check</li>
         <li>Priority improvements with fixes</li>
       </ul>
-      <button class="btn-pay" onclick="startPayment('basic')" style="margin-top:16px">Get Basic — ₹19</button>
+      <button class="btn-pay" id="basicPayBtn" onclick="startPayment('basic')">Get Basic — ₹19</button>
     </div>
 
-    <!-- PRO PLAN ₹49 -->
-    <div class="plan-card" style="border-color:var(--accent2);background:var(--surface)">
-      <div class="plan-card" style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,102,255,.06),transparent);border:none;padding:0;margin:0;border-radius:18px"></div>
+    <!-- PRO PLAN -->
+    <div class="plan-card" style="border-color:var(--accent2)">
       <div class="plan-badge" style="background:linear-gradient(135deg,var(--accent2),#7c3aed)">🚀 Pro Plan — Best Value</div>
       <div class="plan-price" style="color:var(--accent2)"><sup style="font-size:22px">₹</sup>49<sub>/day</sub></div>
       <div class="plan-desc">30 analyses · Valid 24 hours from purchase</div>
@@ -521,18 +374,129 @@ footer a { color: var(--accent); text-decoration: none; }
         <li>Priority improvements with fixes</li>
         <li style="color:var(--accent2);font-weight:600">3× more analyses vs Basic</li>
       </ul>
-      <button class="btn-pay" onclick="startPayment('pro')" style="margin-top:16px;background:linear-gradient(135deg,var(--accent2),#7c3aed)">Get Pro — ₹49</button>
+      <button class="btn-pay" id="proPayBtn" onclick="startPayment('pro')" style="background:linear-gradient(135deg,var(--accent2),#7c3aed)">Get Pro — ₹49</button>
     </div>
 
-    <p class="modal-note">Secure payment via Razorpay · UPI, Cards, Net Banking accepted<br>Access unlocks <strong>instantly</strong> after payment.</p>
-    <p style="font-size:11px;color:#3d4452;margin-top:8px">🔐 Powered by Razorpay</p>
+    <p class="modal-note">🔐 Secure payment via Razorpay · UPI, Cards, Net Banking · Access unlocks instantly after payment</p>
+    <p style="font-size:11px;color:#3d4452;margin-top:6px">Your resume is never stored. Payments processed by Razorpay — we never see your card details.</p>
+
     <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Already purchased? Enter your access code:</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Have an access code?</p>
       <div class="access-code-wrap">
         <input type="text" id="accessCodeInput" placeholder="e.g. RIQ-XXXXXXXX" maxlength="16" />
         <button class="btn-activate" onclick="activateCode()">Activate</button>
       </div>
       <p class="access-msg" id="accessMsg"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRIVACY POLICY MODAL ══ -->
+<div class="privacy-modal-overlay" id="privacyModal">
+  <div class="privacy-modal">
+    <button class="pm-close" onclick="closePrivacyModal()">✕</button>
+    <h2>🔒 Privacy Policy & Terms</h2>
+    <p class="pm-date">Last updated: June 2025 &nbsp;·&nbsp; ResumeStrength</p>
+
+    <div class="pm-highlight">
+      <strong>Plain English Summary:</strong> We analyze your resume using advanced AI. Your resume is <strong>never stored</strong> on our servers. We collect only your Gmail name and email to track daily usage. We never sell your data. Payments are handled entirely by Razorpay — we never see your card details.
+    </div>
+
+    <div class="pm-section">
+      <h3>1. What We Collect</h3>
+      <ul>
+        <li>Your Gmail name, email address and profile photo — collected only when you sign in with Google</li>
+        <li>Your daily usage count — stored in your own browser to track free analyses</li>
+        <li>Your resume content — sent to our AI engine for analysis only, never saved by us</li>
+        <li>Your target role, experience level, geography and job description — used for AI context only, never saved</li>
+      </ul>
+    </div>
+
+    <div class="pm-section">
+      <h3>2. What We Do NOT Collect</h3>
+      <ul>
+        <li>We do not store your resume on any database or server — ever</li>
+        <li>We do not store your job description or any input you type into the form</li>
+        <li>We do not collect your phone number, home address or any financial details</li>
+        <li>We do not track your browsing history or behaviour outside this website</li>
+        <li>We do not use cookies for advertising or tracking purposes</li>
+        <li>We do not sell, rent or share your personal information with any third party</li>
+      </ul>
+    </div>
+
+    <div class="pm-section">
+      <h3>3. How Your Resume Is Processed</h3>
+      <p>When you click Analyze, your resume is converted to a secure format in your browser and sent over HTTPS to our backend server. From there it is forwarded to an AI analysis engine hosted on servers in the United States. The AI reads your resume, generates the analysis score and feedback, and sends the result back to your browser. The resume exists only in memory during this process and is discarded immediately after the result is returned. It is never written to any disk, database or file storage at any point.</p>
+      <p>The AI engine we use does not use API data to train its models by default. Your resume will not be used to train any AI system.</p>
+    </div>
+
+    <div class="pm-section">
+      <h3>4. Google Sign-In</h3>
+      <p>We use Google Sign-In (OAuth 2.0) for authentication. When you sign in with Google we receive only your name, email address and profile photo. We do not receive your Google password, contacts, Gmail messages, Drive files or any other Google account data. Your Google account remains fully under your control at all times. You can revoke access at any time from your Google account settings.</p>
+    </div>
+
+    <div class="pm-section">
+      <h3>5. Payments</h3>
+      <p>All payments are processed by Razorpay, a PCI-DSS Level 1 compliant payment processor. We never see, receive or store your card number, UPI ID, net banking credentials or any payment details. All payment data is handled entirely on Razorpay's secure servers. In the event of a dispute or refund request, please contact us at the email address below.</p>
+    </div>
+
+    <div class="pm-section">
+      <h3>6. Data Security</h3>
+      <ul>
+        <li>All data is transmitted using HTTPS — fully encrypted in transit at all times</li>
+        <li>API requests are routed through a secure backend proxy — your resume never touches third-party scripts in your browser directly</li>
+        <li>We do not maintain any database of user resumes or personal information</li>
+        <li>Your usage count is stored only in your own browser's localStorage on your own device</li>
+        <li>We do not log or record the contents of any resume submitted for analysis</li>
+      </ul>
+    </div>
+
+    <div class="pm-section">
+      <h3>7. Third Party Services</h3>
+      <ul>
+        <li><strong style="color:var(--text)">AI Analysis Engine</strong> — for resume analysis. Data processed per their API privacy terms. Not used for model training.</li>
+        <li><strong style="color:var(--text)">Google Sign-In</strong> — for authentication. Subject to Google's Privacy Policy at policies.google.com/privacy</li>
+        <li><strong style="color:var(--text)">Razorpay</strong> — for payments. Subject to Razorpay's Privacy Policy at razorpay.com/privacy</li>
+        <li><strong style="color:var(--text)">Google AdSense</strong> — for advertising. May place cookies for ad personalisation per Google's Ad Policy</li>
+        <li><strong style="color:var(--text)">Vercel</strong> — for website hosting. Subject to Vercel's Privacy Policy at vercel.com/legal/privacy-policy</li>
+      </ul>
+    </div>
+
+    <div class="pm-section">
+      <h3>8. AI Results Disclaimer</h3>
+      <p>All scores, feedback and recommendations provided by ResumeStrength are generated by artificial intelligence and are advisory in nature only. They do not constitute professional career advice. ResumeStrength makes no guarantee that following the AI suggestions will result in job offers, interviews or any specific career outcome. Always use your own judgement and consider consulting a qualified career professional for important decisions.</p>
+    </div>
+
+    <div class="pm-section">
+      <h3>9. Children's Privacy</h3>
+      <p>ResumeStrength is intended for users who are 18 years of age or older. We do not knowingly collect personal information from anyone under 18. If you are under 18 please do not use this service.</p>
+    </div>
+
+    <div class="pm-section">
+      <h3>10. Your Rights</h3>
+      <ul>
+        <li>You can sign out at any time using the Sign Out button in the header</li>
+        <li>You can clear your local usage data by clearing your browser's localStorage</li>
+        <li>Since we do not store your data on our servers there is nothing to delete on request from our end</li>
+        <li>You can revoke Google Sign-In access from your Google account settings at any time</li>
+        <li>For any privacy concerns please email us at <a href="mailto:helloresumestrength@gmail.com" style="color:var(--accent)">helloresumestrength@gmail.com</a></li>
+      </ul>
+    </div>
+
+    <div class="pm-section">
+      <h3>11. Changes to This Policy</h3>
+      <p>We may update this Privacy Policy from time to time. The date at the top of this page shows when it was last updated. Continued use of the service after any changes constitutes your acceptance of the updated policy.</p>
+    </div>
+
+    <div class="pm-section">
+      <h3>12. Contact Us</h3>
+      <p>For any questions about this Privacy Policy or how we handle your data please contact us at <a href="mailto:helloresumestrength@gmail.com" style="color:var(--accent)">helloresumestrength@gmail.com</a>. We aim to respond within 2 business days.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:28px">
+      <button onclick="closePrivacyModal()" style="background:linear-gradient(135deg,var(--accent),#00c47a);color:#0a0c10;border:none;border-radius:10px;padding:12px 32px;font-family:var(--font-head);font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        I Understand — Close
+      </button>
     </div>
   </div>
 </div>
@@ -547,7 +511,7 @@ footer a { color: var(--accent); text-decoration: none; }
         <div class="usage-dots" id="usageDots"></div>
         <span class="usage-text" id="usageText"></span>
       </div>
-      <button class="btn-upgrade-small" onclick="openModal()" id="headerUpgradeBtn">Upgrade from ₹19</button>
+      <button class="btn-upgrade-small" onclick="openModal()" id="headerUpgradeBtn" style="display:none">Upgrade from ₹19</button>
       <div class="user-chip" id="userChip">
         <div class="user-avatar" id="userAvatar"></div>
         <span class="user-name" id="userName"></span>
@@ -562,25 +526,39 @@ footer a { color: var(--accent); text-decoration: none; }
     <p>AI analysis tailored to your role, level, and market. Know exactly what's holding you back.</p>
   </section>
 
-  <div class="ad-slot leaderboard">Advertisement — 728×90</div>
+  <div class="ad-slot leaderboard">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7220616151185895"
+     crossorigin="anonymous"></script>
+<!-- ResumeIQ Top Banner -->
+    <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7220616151185895"
+     data-ad-slot="8344021306"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+    <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+  </div>
 
   <div class="form-card">
     <div class="section-title">Your Information</div>
     <div class="form-grid">
 
       <div class="form-group full">
-        <label>Resume <span class="opt">(.pdf .txt .doc or paste below)</span></label>
+        <label>Resume <span class="opt">(.pdf · .jpg · .png · .txt — or paste below)</span></label>
         <div class="file-drop" id="fileDrop">
-          <input type="file" id="resumeFile" accept=".pdf,.txt,.doc,.docx">
+          <input type="file" id="resumeFile" accept=".pdf,.jpg,.jpeg,.png,.webp,.txt">
           <div class="icon">📄</div>
           <div class="label">Drag & drop your resume, or click to browse</div>
-          <div class="sublabel">PDF, TXT, DOC — max 5 MB</div>
-          <div class="file-name" id="fileName"></div>
+          <div class="sublabel">PDF · JPG · PNG · TXT · Max 5 MB · Scanned PDFs supported</div>
+          <div class="file-name-display" id="fileNameDisplay"></div>
         </div>
       </div>
 
       <div class="form-group full">
-        <label>Or Paste Resume Text <span class="opt">(if no file upload)</span></label>
+        <label>Or Paste Resume Text <span class="opt">(alternative to file upload)</span></label>
         <textarea id="resumeText" rows="5" placeholder="Paste your full resume content here..."></textarea>
       </div>
 
@@ -612,6 +590,23 @@ footer a { color: var(--accent); text-decoration: none; }
         <label>Job Description <span class="rec">(highly recommended)</span></label>
         <textarea id="jobDesc" rows="4" placeholder="Paste the job description you're applying for…"></textarea>
       </div>
+
+    </div>
+
+    <!-- Privacy Notice -->
+    <div class="privacy-notice">
+      <div class="privacy-notice-icon">🔒</div>
+      <div class="privacy-notice-body">
+        <div class="privacy-notice-title">Before You Upload — What You Should Know</div>
+        <ul class="privacy-points">
+          <li>Your resume is sent securely over HTTPS to our AI engine for analysis. It is processed in memory only and is <strong style="color:var(--text)">never stored</strong> on our servers.</li>
+          <li>We do not save your resume, job description, or any form input anywhere — not in a database, not in the cloud, not anywhere.</li>
+          <li>Your Gmail email is used only to track your daily usage count. It is stored only in your own browser — not on our servers.</li>
+          <li>The AI engine does not use submitted content to train its models. Your resume will not be used to train any AI.</li>
+          <li>Results are AI-generated and <strong style="color:var(--text)">advisory only</strong>. Always use your own judgement before making changes.</li>
+          <li>By clicking Analyze you confirm you have read and agree to our <a href="#" onclick="openPrivacyModal(event)">Privacy Policy</a>.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="error-box" id="errorBox"></div>
@@ -626,7 +621,7 @@ footer a { color: var(--accent); text-decoration: none; }
         <div class="usage-bar-dots" id="usageBarDots"></div>
         <span class="usage-bar-text" id="usageBarText"></span>
       </div>
-      <button class="btn-upgrade-small" onclick="openModal()" id="usageUpgradeBtn">Upgrade from ₹19</button>
+      <button class="btn-upgrade-small" onclick="openModal()" id="usageUpgradeBtn" style="display:none">Upgrade from ₹19</button>
     </div>
 
     <div class="pro-banner" id="proBanner">
@@ -635,52 +630,128 @@ footer a { color: var(--accent); text-decoration: none; }
     </div>
   </div>
 
-  <div class="ad-slot rectangle">Advertisement — 300×250</div>
+  <div class="ad-slot rectangle">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7220616151185895"
+     crossorigin="anonymous"></script>
+<!-- ResumeIQ Middle -->
+    <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7220616151185895"
+     data-ad-slot="5965269973"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+    <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 
   <div id="results"></div>
 
-  <div class="ad-slot rectangle" id="ad-bottom" style="display:none">Advertisement — 300×250</div>
+  <div class="ad-slot rectangle" id="ad-bottom" style="display:none">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7220616151185895"
+     crossorigin="anonymous"></script>
+<!-- ResumeIQ Bottom -->
+    <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7220616151185895"
+     data-ad-slot="4921183982"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+    <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 
   <footer>
-    <p>ResumeIQ uses Claude AI to analyze resumes. Results are advisory — always tailor to your context.</p>
-    <p style="margin-top:6px">Built with ❤️ &nbsp;·&nbsp; <a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a> &nbsp;·&nbsp; <a href="#">Contact</a></p>
+    <p>ResumeStrength — AI-powered resume analysis. Results are advisory. Always use your own judgement.</p>
+    <p style="margin-top:4px;font-size:11px;color:#3d4452">Your resume is never stored on our servers · All data encrypted in transit · We never sell your data</p>
+    <p style="margin-top:10px">
+      <a href="#" onclick="openPrivacyModal(event)">Privacy Policy</a> &nbsp;·&nbsp;
+      <a href="#" onclick="openPrivacyModal(event)">Terms of Use</a> &nbsp;·&nbsp;
+      <a href="mailto:helloresumestrength@gmail.com">Contact</a> &nbsp;·&nbsp;
+      <span style="color:#3d4452">© 2025 ResumeIQ</span>
+    </p>
   </footer>
 
-</div>
+</div><!-- /page-wrap -->
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   CONFIGURATION
-   ─────────────────────────────────────────────────────
-   Replace these two values before going live:
-
-   GOOGLE_CLIENT_ID  → Get from console.cloud.google.com
-                       (Create project → APIs & Services →
-                        Credentials → OAuth 2.0 Client ID)
-
-   RAZORPAY_KEY_ID   → Get from razorpay.com after KYC
+   CONFIGURATION — Replace these before going live
+   ═══════════════════════════════════════════════════════
+   GOOGLE_CLIENT_ID  → console.cloud.google.com
+   RAZORPAY_KEY_ID   → razorpay.com (use rzp_live_... for production)
+   CONTACT_EMAIL     → your actual support email
    ═══════════════════════════════════════════════════════ */
-const GOOGLE_CLIENT_ID   = '678621744326-caa74aqr6pngi4afes8l91i5c730u7an.apps.googleusercontent.com';
-const RAZORPAY_KEY_ID    = 'rzp_test_XXXXXXXXXXXXXXXXXX';
-const FREE_DAILY_LIMIT   = 2;   // free tier
-const BASIC_DAILY_LIMIT  = 10;  // ₹19/day — Basic Plan
-const PRO_DAILY_LIMIT    = 30;  // ₹49/day — Pro Plan
+const GOOGLE_CLIENT_ID  = '678621744326-caa74aqr6pngi4afes8l91i5c730u7an.apps.googleusercontent.com';
+const RAZORPAY_KEY_ID   = 'rzp_test_XXXXXXXXXXXXXXXXXX';
+const CONTACT_EMAIL     = 'helloresumestrength@gmail.com';
+const FREE_DAILY_LIMIT  = 2;
+const BASIC_DAILY_LIMIT = 10;
+const PRO_DAILY_LIMIT   = 30;
+
+let currentUser = null;
 
 /* ═══════════════════════════════════════════════════════
-   STORAGE KEYS
-   Usage is stored per Gmail address so it follows the
-   user across browsers and devices (via localStorage
-   keyed to their email — not bulletproof but solid for
-   a start without a backend database).
+   SERVER-SIDE USAGE — tied to Gmail, blocks incognito bypass
+   Falls back to localStorage if server is unreachable
    ═══════════════════════════════════════════════════════ */
-let currentUser = null; // { email, name, picture }
 
-function storageKey(type) {
+async function serverGetUsage() {
   if (!currentUser) return null;
-  // key format: riq_usage_ravi@gmail.com  or  riq_pro_ravi@gmail.com
-  return `riq_${type}_${currentUser.email}`;
+  try {
+    const res = await fetch('/api/usage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentUser.email, action: 'get' })
+    });
+    if (!res.ok) return null;
+    return await res.json(); // { count, plan }
+  } catch { return null; }
 }
 
+async function serverIncrementUsage() {
+  if (!currentUser) return;
+  try {
+    await fetch('/api/usage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentUser.email, action: 'increment' })
+    });
+  } catch { /* fallback to local below */ }
+}
+
+async function serverDecrementUsage() {
+  if (!currentUser) return;
+  try {
+    await fetch('/api/usage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentUser.email, action: 'decrement' })
+    });
+  } catch { /* silent */ }
+}
+
+async function serverActivatePlan(plan) {
+  if (!currentUser) return false;
+  try {
+    const res = await fetch('/api/usage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentUser.email, action: 'activate_plan', plan })
+    });
+    return res.ok;
+  } catch { return false; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   LOCAL STORAGE — fallback + plan status cache
+   keyed per Gmail so usage is per-account
+   ═══════════════════════════════════════════════════════ */
+function storageKey(type) {
+  if (!currentUser) return null;
+  return `riq_${type}_${currentUser.email}`;
+}
 function getTodayStr() { return new Date().toDateString(); }
 
 function getUsage() {
@@ -692,23 +763,15 @@ function getUsage() {
     return d;
   } catch { return { date: getTodayStr(), count: 0 }; }
 }
-
 function saveUsage(u) {
   const k = storageKey('usage');
   if (k) localStorage.setItem(k, JSON.stringify(u));
 }
 
-function isProActive() {
-  try {
-    const k = storageKey('pro');
-    if (!k) return false;
-    const d = JSON.parse(localStorage.getItem(k) || '{}');
-    return d.expiry && Date.now() < d.expiry;
-  } catch { return false; }
-}
-
+/* ═══════════════════════════════════════════════════════
+   PLAN HELPERS
+   ═══════════════════════════════════════════════════════ */
 function getActivePlan() {
-  // returns 'basic' | 'pro' | null
   try {
     const k = storageKey('pro');
     if (!k) return null;
@@ -717,21 +780,20 @@ function getActivePlan() {
     return d.plan || 'basic';
   } catch { return null; }
 }
+function isProActive() { return !!getActivePlan(); }
 
 function getPlanLimit() {
-  const plan = getActivePlan();
-  if (plan === 'pro')   return PRO_DAILY_LIMIT;
-  if (plan === 'basic') return BASIC_DAILY_LIMIT;
+  const p = getActivePlan();
+  if (p === 'pro')   return PRO_DAILY_LIMIT;
+  if (p === 'basic') return BASIC_DAILY_LIMIT;
   return FREE_DAILY_LIMIT;
 }
-
-function getPlanName() {
-  const plan = getActivePlan();
-  if (plan === 'pro')   return '⚡ Pro Plan Active — 30 Analyses/Day';
-  if (plan === 'basic') return '⚡ Basic Plan Active — 10 Analyses/Day';
+function getPlanLabel() {
+  const p = getActivePlan();
+  if (p === 'pro')   return '🚀 Pro Plan Active — 30 Analyses/Day';
+  if (p === 'basic') return '⚡ Basic Plan Active — 10 Analyses/Day';
   return null;
 }
-
 function getProExpiry() {
   try {
     const k = storageKey('pro');
@@ -740,121 +802,38 @@ function getProExpiry() {
     return d.expiry || null;
   } catch { return null; }
 }
-
-function activatePro(plan) {
-  // plan = 'basic' (₹19) or 'pro' (₹49)
+function activatePlanLocal(plan) {
   const k = storageKey('pro');
   if (!k) return;
   const expiry = Date.now() + 24 * 60 * 60 * 1000;
   localStorage.setItem(k, JSON.stringify({ expiry, plan }));
   updateUsageUI();
 }
-
-function getRemainingFree() {
-  const limit = getPlanLimit();
-  return Math.max(0, limit - getUsage().count);
+function getRemainingCount() {
+  return Math.max(0, getPlanLimit() - getUsage().count);
 }
 
 /* ═══════════════════════════════════════════════════════
-   GOOGLE SIGN-IN
+   TOAST
    ═══════════════════════════════════════════════════════ */
-function initGoogleSignIn() {
-  if (typeof google === 'undefined') {
-    // GIS script not loaded yet — retry after 500ms
-    setTimeout(initGoogleSignIn, 500);
-    return;
-  }
-
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleCredential,
-    auto_select: false,
-    cancel_on_tap_outside: false,
-  });
-
-  // Render the official Google button inside our container
-  google.accounts.id.renderButton(
-    document.getElementById('googleBtnContainer'),
-    {
-      theme: 'filled_black',
-      size: 'large',
-      text: 'continue_with',
-      shape: 'rectangular',
-      width: 320,
-    }
-  );
-
-  // Hide our fallback button since GIS rendered the real one
-  document.getElementById('googleFallbackBtn').style.display = 'none';
-
-  // Also prompt the One Tap popup if user was previously signed in
-  google.accounts.id.prompt();
-
-  // Check if user is already saved in this session
-  const saved = sessionStorage.getItem('riq_user');
-  if (saved) {
-    try {
-      currentUser = JSON.parse(saved);
-      showApp(currentUser);
-    } catch { /* ignore */ }
-  }
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
 }
 
-function triggerGoogleSignIn() {
-  if (typeof google !== 'undefined') {
-    google.accounts.id.prompt();
-  } else {
-    alert('Google Sign-In is loading. Please wait a moment and try again.');
-  }
-}
-
-function handleGoogleCredential(response) {
-  // Decode the JWT token Google sends back (we only read the payload)
-  const payload = parseJwt(response.credential);
-  currentUser = {
-    email:   payload.email,
-    name:    payload.name,
-    picture: payload.picture,
-  };
-  // Save to session so page refresh doesn't log them out
-  sessionStorage.setItem('riq_user', JSON.stringify(currentUser));
-  showApp(currentUser);
-}
-
-function parseJwt(token) {
-  // JWT has 3 parts separated by dots: header.payload.signature
-  // We only need the payload (middle part), which is base64 encoded
-  const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-  return JSON.parse(atob(base64));
-}
-
-function showApp(user) {
-  // Hide login wall
-  document.getElementById('loginWall').style.display = 'none';
-
-  // Populate header user chip
-  const avatarEl = document.getElementById('userAvatar');
-  if (user.picture) {
-    avatarEl.innerHTML = `<img src="${user.picture}" alt="${user.name}">`;
-  } else {
-    avatarEl.textContent = user.name.charAt(0).toUpperCase();
-  }
-  document.getElementById('userName').textContent = user.name.split(' ')[0];
-
-  updateUsageUI();
-}
-
-function signOut() {
-  if (typeof google !== 'undefined') {
-    google.accounts.id.disableAutoSelect();
-  }
-  currentUser = null;
-  sessionStorage.removeItem('riq_user');
-  // Clear results and form
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('ad-bottom').style.display = 'none';
-  // Show login wall again
-  document.getElementById('loginWall').style.display = 'flex';
+/* ═══════════════════════════════════════════════════════
+   ERROR BOX
+   ═══════════════════════════════════════════════════════ */
+let errorTimer;
+function showError(msg) {
+  const b = document.getElementById('errorBox');
+  b.textContent = msg; b.style.display = 'block';
+  clearTimeout(errorTimer);
+  errorTimer = setTimeout(() => b.style.display = 'none', 7000);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -862,149 +841,206 @@ function signOut() {
    ═══════════════════════════════════════════════════════ */
 function updateUsageUI() {
   if (!currentUser) return;
+  const remaining = getRemainingCount();
+  const plan      = getActivePlan();
+  const limit     = getPlanLimit();
+  const used      = limit - remaining;
 
-  const remaining  = getRemainingFree();
-  const planLimit  = getPlanLimit();
-  const plan       = getActivePlan();
-  const isPro      = isProActive();
-
-  // ── Header pill ──
-  const dotsEl           = document.getElementById('usageDots');
-  const textEl           = document.getElementById('usageText');
-  const upgradeHeaderBtn = document.getElementById('headerUpgradeBtn');
+  // Header dots
+  const dotsEl   = document.getElementById('usageDots');
+  const textEl   = document.getElementById('usageText');
+  const hdrBtn   = document.getElementById('headerUpgradeBtn');
   dotsEl.innerHTML = '';
 
-  if (isPro) {
+  if (plan) {
     const d = document.createElement('div');
     d.style.cssText = 'width:8px;height:8px;border-radius:50%;background:var(--gold)';
     dotsEl.appendChild(d);
-    if (plan === 'pro') {
-      textEl.textContent = remaining + ' of 30 left';
-    } else {
-      textEl.textContent = remaining + ' of 10 left';
-    }
+    textEl.textContent = remaining + ' left';
     textEl.style.color = 'var(--gold)';
-    upgradeHeaderBtn.style.display = (plan === 'basic' && remaining === 0) ? 'block' : 'none';
-    if (plan === 'basic' && remaining === 0) {
-      upgradeHeaderBtn.textContent = 'Upgrade ₹49';
-    }
+    hdrBtn.style.display = (plan === 'basic' && remaining === 0) ? 'block' : 'none';
+    if (plan === 'basic' && remaining === 0) hdrBtn.textContent = 'Upgrade ₹49';
   } else {
     for (let i = 0; i < FREE_DAILY_LIMIT; i++) {
       const d = document.createElement('div');
-      d.className = 'usage-dot ' + (i < (FREE_DAILY_LIMIT - remaining) ? 'used' : 'empty');
+      d.className = 'usage-dot ' + (i < used ? 'used' : '');
       dotsEl.appendChild(d);
     }
     textEl.textContent = remaining + ' free left';
     textEl.style.color = '';
-    upgradeHeaderBtn.style.display = remaining === 0 ? 'block' : 'none';
-    upgradeHeaderBtn.textContent = 'Upgrade ₹19';
+    hdrBtn.style.display = remaining === 0 ? 'block' : 'none';
+    hdrBtn.textContent = 'Upgrade from ₹19';
   }
 
-  // ── Below-button bar ──
+  // Below-button bar
   const barDots   = document.getElementById('usageBarDots');
   const barText   = document.getElementById('usageBarText');
-  const upgradeBtn = document.getElementById('usageUpgradeBtn');
-  const proBanner  = document.getElementById('proBanner');
-  const proExpiry  = document.getElementById('proExpiry');
-  const proLabel   = document.getElementById('proBannerLabel');
+  const barBtn    = document.getElementById('usageUpgradeBtn');
+  const proBanner = document.getElementById('proBanner');
+  const proLabel  = document.getElementById('proBannerLabel');
+  const proExp    = document.getElementById('proExpiry');
   barDots.innerHTML = '';
 
-  if (isPro) {
+  if (plan && remaining > 0) {
     proBanner.classList.add('show');
     document.getElementById('usageBar').style.display = 'none';
-    if (proLabel) proLabel.textContent = getPlanName();
+    if (proLabel) proLabel.textContent = getPlanLabel();
     const exp = getProExpiry();
     if (exp) {
       const hrs = Math.ceil((exp - Date.now()) / 3600000);
-      proExpiry.textContent = `Expires in ~${hrs} hour${hrs !== 1 ? 's' : ''}`;
-    }
-    // If basic plan is exhausted, still show the bar so they can upgrade to pro
-    if (plan === 'basic' && remaining === 0) {
-      proBanner.classList.remove('show');
-      document.getElementById('usageBar').style.display = 'flex';
-      for (let i = 0; i < BASIC_DAILY_LIMIT; i++) {
-        const d = document.createElement('div');
-        d.className = 'usage-bar-dot active';
-        barDots.appendChild(d);
-      }
-      barText.innerHTML = '<strong style="color:#ef4444">Basic plan limit reached.</strong> Upgrade to Pro for 30 analyses.';
-      upgradeBtn.textContent = 'Upgrade to Pro ₹49';
-      upgradeBtn.style.display = 'block';
+      proExp.textContent = 'Expires in ~' + hrs + ' hour' + (hrs !== 1 ? 's' : '');
     }
   } else {
     proBanner.classList.remove('show');
     document.getElementById('usageBar').style.display = 'flex';
-    for (let i = 0; i < FREE_DAILY_LIMIT; i++) {
+    const displayLimit = plan ? (plan === 'basic' ? BASIC_DAILY_LIMIT : PRO_DAILY_LIMIT) : FREE_DAILY_LIMIT;
+    for (let i = 0; i < Math.min(displayLimit, 10); i++) {
       const d = document.createElement('div');
-      d.className = 'usage-bar-dot ' + (i < (FREE_DAILY_LIMIT - remaining) ? 'active' : 'inactive');
+      d.className = 'usage-bar-dot ' + (i < used ? 'active' : 'inactive');
       barDots.appendChild(d);
     }
     if (remaining === 0) {
-      barText.innerHTML = '<strong style="color:#ef4444">Free limit reached.</strong> Upgrade to continue.';
-      upgradeBtn.textContent = 'Upgrade from ₹19';
-      upgradeBtn.style.display = 'block';
+      const msg = plan === 'basic'
+        ? '<strong style="color:#ef4444">Basic limit reached.</strong> Upgrade to Pro for 30 analyses.'
+        : '<strong style="color:#ef4444">Free limit reached.</strong> Upgrade to continue.';
+      barText.innerHTML = msg;
+      barBtn.textContent = plan === 'basic' ? 'Upgrade to Pro ₹49' : 'Upgrade from ₹19';
+      barBtn.style.display = 'block';
     } else {
-      barText.innerHTML = `<strong>${remaining}</strong> of ${FREE_DAILY_LIMIT} free analyses remaining today`;
-      upgradeBtn.textContent = 'Upgrade from ₹19';
-      upgradeBtn.style.display = remaining < FREE_DAILY_LIMIT ? 'block' : 'none';
+      barText.innerHTML = '<strong>' + remaining + '</strong> of ' + displayLimit + ' analyses remaining today';
+      barBtn.style.display = remaining < displayLimit ? 'block' : 'none';
+      barBtn.textContent = 'Upgrade from ₹19';
     }
   }
 }
 
 /* ═══════════════════════════════════════════════════════
-   MODAL
+   GOOGLE SIGN-IN
    ═══════════════════════════════════════════════════════ */
-function openModal() {
-  document.getElementById('upgradeModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+function initGoogleSignIn() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    setTimeout(initGoogleSignIn, 500); return;
+  }
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: false,
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('googleBtnContainer'),
+    { theme: 'outline', size: 'large', width: 320, text: 'continue_with' }
+  );
+  document.getElementById('googleFallbackBtn').style.display = 'none';
 }
-function closeModal() {
-  document.getElementById('upgradeModal').classList.remove('open');
-  document.body.style.overflow = '';
-  document.getElementById('accessMsg').className = 'access-msg';
-  document.getElementById('accessCodeInput').value = '';
+
+function triggerGoogleSignIn() {
+  if (typeof google !== 'undefined' && google.accounts) {
+    google.accounts.id.prompt();
+  } else {
+    alert('Google Sign-In is loading. Please wait a moment and try again.');
+  }
 }
-document.getElementById('upgradeModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+
+function handleCredentialResponse(response) {
+  try {
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    currentUser = { email: payload.email, name: payload.name, picture: payload.picture };
+    onSignedIn();
+  } catch(e) { alert('Sign-in failed. Please try again.'); }
+}
+
+function onSignedIn() {
+  document.getElementById('loginWall').style.display = 'none';
+  // Avatar
+  const av = document.getElementById('userAvatar');
+  if (currentUser.picture) {
+    av.innerHTML = '<img src="' + currentUser.picture + '" alt="">';
+  } else {
+    av.textContent = currentUser.name.charAt(0).toUpperCase();
+  }
+  document.getElementById('userName').textContent = currentUser.name.split(' ')[0];
+
+  // Sync usage from server — this ensures incognito sees real count
+  serverGetUsage().then(serverData => {
+    if (serverData) {
+      // Server responded — sync local cache with server count
+      const today = getTodayStr();
+      const local = getUsage();
+
+      // Use whichever count is higher to prevent bypass
+      const trueCount = Math.max(local.count, serverData.count || 0);
+      saveUsage({ date: today, count: trueCount });
+
+      // Sync plan from server if active
+      if (serverData.plan && serverData.planExpiry && Date.now() < serverData.planExpiry) {
+        const k = storageKey('pro');
+        if (k) localStorage.setItem(k, JSON.stringify({ expiry: serverData.planExpiry, plan: serverData.plan }));
+      }
+    }
+    updateUsageUI();
+  }).catch(() => updateUsageUI());
+}
+
+function signOut() {
+  currentUser = null;
+  if (typeof google !== 'undefined' && google.accounts) google.accounts.id.disableAutoSelect();
+  document.getElementById('loginWall').style.display = 'flex';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('ad-bottom').style.display = 'none';
+  document.getElementById('resumeText').value = '';
+  document.getElementById('resumeFile').value = '';
+  document.getElementById('fileNameDisplay').textContent = '';
+}
 
 /* ═══════════════════════════════════════════════════════
-   RAZORPAY PAYMENT
+   MODALS
+   ═══════════════════════════════════════════════════════ */
+function openModal()  { document.getElementById('upgradeModal').classList.add('open');    document.body.style.overflow = 'hidden'; }
+function closeModal() { document.getElementById('upgradeModal').classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('upgradeModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+function openPrivacyModal(e) {
+  if (e) e.preventDefault();
+  document.getElementById('privacyModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePrivacyModal() {
+  document.getElementById('privacyModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('privacyModal').addEventListener('click', function(e) { if (e.target === this) closePrivacyModal(); });
+
+/* ═══════════════════════════════════════════════════════
+   PAYMENT
    ═══════════════════════════════════════════════════════ */
 function startPayment(plan) {
-  // plan = 'basic' (₹19, 10 analyses) or 'pro' (₹49, 30 analyses)
   if (typeof Razorpay === 'undefined') {
-    alert('To enable payments:\n1. Sign up at razorpay.com\n2. Get your Key ID\n3. Replace RAZORPAY_KEY_ID in the script\n4. Uncomment the Razorpay <script> tag in <head>');
+    alert('Payment is being set up. Please ensure Razorpay script is enabled in the <head> tag after KYC approval.');
     return;
   }
-  const isProPlan   = plan === 'pro';
-  const amount      = isProPlan ? 4900 : 1900;           // paise
-  const planLabel   = isProPlan ? 'Pro Plan — 30 analyses' : 'Basic Plan — 10 analyses';
-  const successMsg  = isProPlan
-    ? '✅ Pro Plan activated! 30 analyses for the next 24 hours.'
-    : '✅ Basic Plan activated! 10 analyses for the next 24 hours.';
+  const isProPlan  = plan === 'pro';
+  const amount     = isProPlan ? 4900 : 1900;
+  const label      = isProPlan ? 'Pro Plan — 30 analyses/day' : 'Basic Plan — 10 analyses/day';
+  const successMsg = isProPlan
+    ? '✅ Pro Plan activated! 30 analyses for 24 hours.'
+    : '✅ Basic Plan activated! 10 analyses for 24 hours.';
 
   const options = {
     key: RAZORPAY_KEY_ID,
-    amount,
-    currency: 'INR',
-    name: 'ResumeIQ',
-    description: planLabel,
-    prefill: {
-      email: currentUser ? currentUser.email : '',
-      name:  currentUser ? currentUser.name  : '',
-    },
+    amount, currency: 'INR',
+    name: 'ResumeStrength',
+    description: label,
+    prefill: { email: currentUser?.email || '', name: currentUser?.name || '' },
     theme: { color: isProPlan ? '#0066ff' : '#f59e0b' },
-    handler: function() {
-      activatePro(plan);
+    handler: async function() {
+      activatePlanLocal(plan);
+      await serverActivatePlan(plan);
       closeModal();
       showToast(successMsg);
     },
   };
   const rzp = new Razorpay(options);
-  rzp.on('payment.failed', function(r) {
-    alert('Payment failed: ' + r.error.description + '\nPlease try again.');
-  });
+  rzp.on('payment.failed', r => alert('Payment failed: ' + r.error.description + '\nPlease try again.'));
   rzp.open();
 }
 
@@ -1012,15 +1048,16 @@ function startPayment(plan) {
    ACCESS CODE
    ═══════════════════════════════════════════════════════ */
 const VALID_CODES = [
-  // 'RIQ-DEMO1234',
+  // Add your promo / test codes here e.g: 'RIQ-PROMO001'
 ];
 function activateCode() {
   const code  = document.getElementById('accessCodeInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('accessMsg');
   if (!code) { msgEl.textContent = 'Please enter a code.'; msgEl.className = 'access-msg err'; return; }
   if (VALID_CODES.includes(code)) {
-    activatePro('basic');
-    msgEl.textContent = '✅ Access activated! 10 analyses for the next 24 hours.';
+    activatePlanLocal('basic');
+    serverActivatePlan('basic');
+    msgEl.textContent = '✅ Code activated! 10 analyses for the next 24 hours.';
     msgEl.className = 'access-msg ok';
     setTimeout(closeModal, 1500);
   } else {
@@ -1030,136 +1067,188 @@ function activateCode() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   TOAST
+   FILE HANDLING — converts file to base64 for AI
    ═══════════════════════════════════════════════════════ */
-function showToast(msg) {
-  const t = document.createElement('div');
-  t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-    background:#181b22;border:1px solid var(--accent);color:var(--text);
-    padding:12px 22px;border-radius:100px;font-size:14px;font-weight:500;
-    z-index:9999;animation:fadeUp .3s ease;box-shadow:0 8px 32px rgba(0,0,0,.5);white-space:nowrap;`;
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 4000);
-}
-
-/* ═══════════════════════════════════════════════════════
-   FILE DROP
-   ═══════════════════════════════════════════════════════ */
-const fileDrop  = document.getElementById('fileDrop');
 const fileInput = document.getElementById('resumeFile');
-const fileNameEl = document.getElementById('fileName');
+const fileDrop  = document.getElementById('fileDrop');
+
 fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('drag'); });
 fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('drag'));
 fileDrop.addEventListener('drop', e => {
   e.preventDefault(); fileDrop.classList.remove('drag');
-  if (e.dataTransfer.files[0]) { fileInput.files = e.dataTransfer.files; fileNameEl.textContent = '✓ ' + e.dataTransfer.files[0].name; }
+  if (e.dataTransfer.files[0]) { fileInput.files = e.dataTransfer.files; showFileName(e.dataTransfer.files[0].name); }
 });
-fileInput.addEventListener('change', () => { if (fileInput.files[0]) fileNameEl.textContent = '✓ ' + fileInput.files[0].name; });
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) showFileName(fileInput.files[0].name); });
+function showFileName(n) { document.getElementById('fileNameDisplay').textContent = '✓ ' + n; }
 
-/* ═══════════════════════════════════════════════════════
-   HELPERS
-   ═══════════════════════════════════════════════════════ */
-function showError(msg) {
-  const b = document.getElementById('errorBox');
-  b.textContent = msg; b.style.display = 'block';
-  setTimeout(() => b.style.display = 'none', 6000);
-}
-async function readFileAsText(file) {
+async function readFileAsBase64(file) {
   return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = e => res(e.target.result);
-    r.onerror = () => rej(new Error('File read failed'));
-    r.readAsText(file);
+    const reader = new FileReader();
+    reader.onload  = e => res(e.target.result.split(',')[1]);
+    reader.onerror = () => rej(new Error('File read failed.'));
+    reader.readAsDataURL(file);
   });
 }
 
 /* ═══════════════════════════════════════════════════════
-   MAIN ANALYZE
+   ANALYZE
    ═══════════════════════════════════════════════════════ */
 async function analyzeResume() {
   if (!currentUser) { showError('Please sign in first.'); return; }
 
-  // Usage gate
-  const planLimit = getPlanLimit();
-  if (getUsage().count >= planLimit) {
-    openModal(); return;
+  // Usage gate — check server first for accurate count (blocks incognito bypass)
+  let serverUsage = null;
+  try {
+    serverUsage = await serverGetUsage();
+  } catch { /* continue with local */ }
+
+  if (serverUsage) {
+    // Sync local with server — use the higher of the two
+    const trueCount = Math.max(getUsage().count, serverUsage.count || 0);
+    saveUsage({ date: getTodayStr(), count: trueCount });
+
+    // Sync plan from server
+    if (serverUsage.plan && serverUsage.planExpiry && Date.now() < serverUsage.planExpiry) {
+      const k = storageKey('pro');
+      if (k) localStorage.setItem(k, JSON.stringify({ expiry: serverUsage.planExpiry, plan: serverUsage.plan }));
+    }
   }
+
+  if (getUsage().count >= getPlanLimit()) { openModal(); return; }
+
+  const role  = document.getElementById('targetRole').value.trim();
+  const level = document.getElementById('expLevel').value;
+  const geo   = document.getElementById('geography').value.trim();
+  const jd    = document.getElementById('jobDesc').value.trim();
+  let resumeTxt  = document.getElementById('resumeText').value.trim();
+  let fileBase64 = null;
+  let fileMediaType = null;
+
+  // Handle file upload
+  if (fileInput.files[0]) {
+    const file     = fileInput.files[0];
+    const fileName = file.name.toLowerCase();
+
+    if (file.size > 5 * 1024 * 1024) { showError('File is too large. Please upload a file under 5MB.'); return; }
+
+    if      (fileName.endsWith('.pdf'))                          fileMediaType = 'application/pdf';
+    else if (fileName.endsWith('.png'))                          fileMediaType = 'image/png';
+    else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) fileMediaType = 'image/jpeg';
+    else if (fileName.endsWith('.webp'))                         fileMediaType = 'image/webp';
+    else if (fileName.endsWith('.txt')) {
+      try {
+        resumeTxt = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = e => res(e.target.result);
+          r.onerror = () => rej(new Error('Failed'));
+          r.readAsText(file);
+        });
+      } catch { showError('Could not read text file.'); return; }
+    } else if (fileName.endsWith('.docx') || fileName.endsWith('.doc')) {
+      showError('Word files are not supported directly. Please open your Word file → File → Save As → PDF, then upload the PDF.');
+      return;
+    } else {
+      showError('Unsupported file type. Please upload a PDF, JPG, PNG, WEBP or TXT file.');
+      return;
+    }
+
+    if (fileMediaType) {
+      try { fileBase64 = await readFileAsBase64(file); }
+      catch { showError('Could not read file. Please try again or paste your resume text below.'); return; }
+    }
+  }
+
+  if (!fileBase64 && !resumeTxt) { showError('Please upload your resume or paste the text below.'); return; }
+  if (!role)  { showError('Please enter the target role.');          return; }
+  if (!level) { showError('Please select your experience level.');   return; }
+
+  // Deduct usage — server (accurate) + local (UI speed)
+  const usage = getUsage();
+  usage.count += 1;
+  saveUsage(usage);
+  updateUsageUI();
+  serverIncrementUsage(); // async — no await needed, fire and forget
 
   const btn = document.getElementById('analyzeBtn');
-  const role    = document.getElementById('targetRole').value.trim();
-  const level   = document.getElementById('expLevel').value;
-  const geo     = document.getElementById('geography').value.trim();
-  const jd      = document.getElementById('jobDesc').value.trim();
-  let resumeTxt = document.getElementById('resumeText').value.trim();
-
-  if (!resumeTxt && fileInput.files[0]) {
-    try { resumeTxt = await readFileAsText(fileInput.files[0]); }
-    catch { showError('Could not read file. Please paste resume text instead.'); return; }
-  }
-  if (!resumeTxt) { showError('Please upload or paste your resume.'); return; }
-  if (!role)       { showError('Please enter the target role.'); return; }
-  if (!level)      { showError('Please select your experience level.'); return; }
-
-  // Deduct usage before API call
-  const usageNow = getUsage();
-  usageNow.count += 1;
-  saveUsage(usageNow);
-  updateUsageUI();
-
   btn.classList.add('loading'); btn.disabled = true;
   document.getElementById('results').style.display = 'none';
+  document.getElementById('errorBox').style.display = 'none';
 
   try {
+    const messages = buildMessages(resumeTxt, role, level, geo, jd, fileBase64, fileMediaType);
+
     const response = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 1000,
-        system: `You are a professional resume coach and hiring expert with 20 years of experience across tech, finance, healthcare, and consulting industries. Score resumes rigorously and give actionable advice. Respond ONLY with a valid JSON object — no markdown, no code fences, no preamble.`,
-        messages: [{ role: 'user', content: buildPrompt(resumeTxt, role, level, geo, jd) }]
+        system: 'You are a professional resume coach and hiring expert with 20 years of experience. Score resumes rigorously and give specific, actionable advice. Always respond ONLY with a valid JSON object — no markdown, no code fences, no preamble, no explanation.',
+        messages
       })
     });
 
     const data = await response.json();
     if (data.error) throw new Error(data.error.message);
-    const raw = data.content.map(b => b.text || '').join('');
-    const result = JSON.parse(raw.replace(/```json|```/g, '').trim());
+
+    const raw    = data.content.map(b => b.text || '').join('');
+    const clean  = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
     renderResults(result, role, level, geo);
 
-    if (getRemainingFree() === 0) {
+    // Post-analysis toast nudge
+    if (getRemainingCount() === 0) {
       const plan = getActivePlan();
       if (!plan) {
-        setTimeout(() => showToast('💡 Free analyses used up. Upgrade to Basic (₹19 / 10 analyses) or Pro (₹49 / 30 analyses).'), 2000);
+        setTimeout(() => showToast('💡 Free analyses used up. Upgrade: Basic ₹19 (10 analyses) or Pro ₹49 (30 analyses).'), 2000);
       } else if (plan === 'basic') {
         setTimeout(() => showToast('💡 Basic plan limit reached. Upgrade to Pro for ₹49 and get 30 analyses today.'), 2000);
       }
     }
+
   } catch (err) {
-    const usage = getUsage();
-    usage.count = Math.max(0, usage.count - 1);
-    saveUsage(usage);
+    // Rollback usage on failure — both local and server
+    const u = getUsage();
+    u.count = Math.max(0, u.count - 1);
+    saveUsage(u);
     updateUsageUI();
+    serverDecrementUsage();
     showError('Analysis failed: ' + (err.message || 'Unknown error. Please try again.'));
   } finally {
     btn.classList.remove('loading'); btn.disabled = false;
   }
 }
 
-function buildPrompt(resume, role, level, geo, jd) {
-  return `Analyze this resume for: "${role}" at "${level}" level${geo ? ' in ' + geo : ''}.
-${jd ? '\nJOB DESCRIPTION:\n' + jd.substring(0, 2000) : ''}
+/* ═══════════════════════════════════════════════════════
+   BUILD MESSAGES — supports file + text
+   ═══════════════════════════════════════════════════════ */
+function buildMessages(resumeText, role, level, geo, jd, fileBase64, fileMediaType) {
+  const userContent = [];
 
-RESUME:
-${resume.substring(0, 3000)}
+  // Attach file if uploaded — Claude reads it natively (including scanned PDFs)
+  if (fileBase64 && fileMediaType) {
+    if (fileMediaType === 'application/pdf') {
+      userContent.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: fileBase64 } });
+    } else {
+      userContent.push({ type: 'image', source: { type: 'base64', media_type: fileMediaType, data: fileBase64 } });
+    }
+  }
 
-Return ONLY this JSON (no markdown):
+  const textPart = resumeText ? '\n\nRESUME TEXT:\n' + resumeText.substring(0, 4000) : '';
+
+  userContent.push({
+    type: 'text',
+    text: `Analyze this resume for a candidate applying to: "${role}" at the "${level}" level${geo ? ' in ' + geo : ''}.
+${jd ? '\nJOB DESCRIPTION:\n' + jd.substring(0, 2000) : ''}${textPart}
+
+${fileBase64 ? 'The resume is provided above as a file. Extract all text from it — including if it is a scanned document or image — and analyze fully.' : ''}
+
+Return ONLY this JSON (no markdown, no explanation):
 {
-  "overall_score": <0-100>,
+  "overall_score": <0-100 integer>,
   "tier": <"Excellent"|"Strong"|"Average"|"Weak"|"Poor">,
   "tier_summary": <one sentence verdict>,
-  "summary": <2-3 sentence analysis>,
+  "summary": <2-3 sentence overall analysis>,
   "sub_scores": {
     "content_impact": <0-100>,
     "ats_compatibility": <0-100>,
@@ -1168,41 +1257,50 @@ Return ONLY this JSON (no markdown):
     "keywords_skills": <0-100>,
     "quantification": <0-100>
   },
-  "strengths": [<3-5 specific strengths>],
+  "strengths": [<3-5 specific strength strings>],
   "improvements": [
-    { "priority": <"high"|"medium"|"low">, "title": <title>, "what": <issue>, "why": <reason>, "how": <fix> }
+    { "priority": <"high"|"medium"|"low">, "title": <short title>, "what": <what is wrong>, "why": <why it matters for this role>, "how": <specific fix> }
   ],
-  "keywords_found": [<up to 8 keywords present>],
-  "keywords_missing": [<up to 8 keywords missing>],
-  "ats_issues": [<ATS concerns or empty array>]
-}`;
+  "keywords_found": [<up to 8 keywords present in resume relevant to role>],
+  "keywords_missing": [<up to 8 important keywords missing>],
+  "ats_issues": [<ATS formatting concerns or empty array>]
+}`
+  });
+
+  return [{ role: 'user', content: userContent }];
 }
 
 /* ═══════════════════════════════════════════════════════
    RENDER RESULTS
    ═══════════════════════════════════════════════════════ */
 function renderResults(r, role, level, geo) {
-  const el = document.getElementById('results');
+  const el    = document.getElementById('results');
   const score = r.overall_score;
+
   const tierColors = {
-    Excellent: { bg:'rgba(0,229,160,.12)', color:'var(--accent)', emoji:'🏆' },
-    Strong:    { bg:'rgba(0,102,255,.12)', color:'var(--accent2)', emoji:'💪' },
-    Average:   { bg:'rgba(234,179,8,.12)', color:'#eab308', emoji:'📊' },
-    Weak:      { bg:'rgba(255,107,53,.12)', color:'var(--warn)', emoji:'⚠️' },
-    Poor:      { bg:'rgba(239,68,68,.12)', color:'#ef4444', emoji:'🔴' }
+    Excellent: { bg: 'rgba(0,229,160,.12)',  color: 'var(--accent)',  emoji: '🏆' },
+    Strong:    { bg: 'rgba(0,102,255,.12)',  color: 'var(--accent2)', emoji: '💪' },
+    Average:   { bg: 'rgba(234,179,8,.12)', color: '#eab308',        emoji: '📊' },
+    Weak:      { bg: 'rgba(255,107,53,.12)', color: 'var(--warn)',    emoji: '⚠️' },
+    Poor:      { bg: 'rgba(239,68,68,.12)', color: '#ef4444',        emoji: '🔴' },
   };
-  const tc = tierColors[r.tier] || tierColors.Average;
-  const sc = score >= 80 ? 'var(--accent)' : score >= 60 ? 'var(--accent2)' : score >= 40 ? 'var(--warn)' : '#ef4444';
+  const tc   = tierColors[r.tier] || tierColors.Average;
+  const sc   = score >= 80 ? 'var(--accent)' : score >= 60 ? 'var(--accent2)' : score >= 40 ? 'var(--warn)' : '#ef4444';
   const circ = 2 * Math.PI * 66;
-  const offset = circ - (score / 100) * circ;
-  const subLabels = { content_impact:'Content Impact', ats_compatibility:'ATS Score', role_alignment:'Role Fit', formatting_clarity:'Formatting', keywords_skills:'Keywords', quantification:'Quantification' };
+  const off  = circ - (score / 100) * circ;
+
+  const subLabels = {
+    content_impact: 'Content Impact', ats_compatibility: 'ATS Score',
+    role_alignment: 'Role Fit', formatting_clarity: 'Formatting',
+    keywords_skills: 'Keywords', quantification: 'Quantification'
+  };
 
   const subHTML = Object.entries(r.sub_scores || {}).map(([k, v]) => {
     const c = v >= 75 ? 'var(--accent)' : v >= 55 ? 'var(--accent2)' : v >= 35 ? 'var(--warn)' : '#ef4444';
     return `<div class="sub-card"><div class="s-label">${subLabels[k]||k}</div><div class="s-score" style="color:${c}">${v}</div><div class="s-bar"><div class="s-fill" style="width:${v}%;background:${c}"></div></div></div>`;
   }).join('');
 
-  const impHTML = (r.improvements||[]).map(i=>`
+  const impHTML = (r.improvements || []).map(i => `
     <div class="improvement-item ${i.priority}">
       <div class="imp-header"><span class="imp-priority ${i.priority}">${i.priority}</span><span class="imp-title">${i.title}</span></div>
       <div class="imp-why"><strong>What:</strong> ${i.what}</div>
@@ -1210,10 +1308,10 @@ function renderResults(r, role, level, geo) {
       <div class="imp-why" style="margin-top:4px"><strong>Fix:</strong> ${i.how}</div>
     </div>`).join('');
 
-  const strengthsHTML = (r.strengths||[]).map(s=>`<div class="strength-item">${s}</div>`).join('');
-  const kwFoundHTML   = (r.keywords_found||[]).map(k=>`<span class="kw-tag found">✓ ${k}</span>`).join('');
-  const kwMissHTML    = (r.keywords_missing||[]).map(k=>`<span class="kw-tag missing">+ ${k}</span>`).join('');
-  const atsHTML = (r.ats_issues||[]).length
+  const strengthsHTML = (r.strengths || []).map(s => `<div class="strength-item">${s}</div>`).join('');
+  const kwFoundHTML   = (r.keywords_found   || []).map(k => `<span class="kw-tag found">✓ ${k}</span>`).join('');
+  const kwMissHTML    = (r.keywords_missing || []).map(k => `<span class="kw-tag missing">+ ${k}</span>`).join('');
+  const atsHTML = (r.ats_issues || []).length
     ? `<div class="form-card" style="margin-top:0"><div class="section-title" style="margin-bottom:12px">⚙️ ATS Issues</div>${r.ats_issues.map(a=>`<div class="imp-why" style="margin-bottom:6px">• ${a}</div>`).join('')}</div>` : '';
 
   el.innerHTML = `
@@ -1222,7 +1320,7 @@ function renderResults(r, role, level, geo) {
         <svg width="155" height="155" viewBox="0 0 155 155">
           <circle cx="77.5" cy="77.5" r="66" fill="none" stroke="var(--border)" stroke-width="9"/>
           <circle cx="77.5" cy="77.5" r="66" fill="none" stroke="${sc}" stroke-width="9"
-            stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round"
+            stroke-dasharray="${circ}" stroke-dashoffset="${off}" stroke-linecap="round"
             style="transition:stroke-dashoffset 1.2s ease"/>
         </svg>
         <div class="score-ring-center">
@@ -1239,19 +1337,22 @@ function renderResults(r, role, level, geo) {
     </div>
     <div class="sub-scores">${subHTML}</div>
     <div class="section-title" style="margin-bottom:14px">🔧 What to Fix & Why</div>
-    <div class="improvement-list">${impHTML||'<div class="improvement-item low"><div class="imp-title">No critical issues found — great resume!</div></div>'}</div>
+    <div class="improvement-list">${impHTML||'<div class="improvement-item low"><div class="imp-title">✅ No critical issues found — this is a strong resume!</div></div>'}</div>
     <div class="feedback-grid">
       <div class="feedback-panel">
-        <div class="fp-title"><span>✅</span> Strengths</div>
+        <div class="fp-title">✅ Strengths</div>
         <div class="strength-list">${strengthsHTML}</div>
       </div>
       <div class="feedback-panel">
-        <div class="fp-title"><span>🔑</span> Keywords</div>
+        <div class="fp-title">🔑 Keywords</div>
         ${kwFoundHTML?`<p style="font-size:10px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Found</p><div class="keyword-wrap" style="margin-bottom:12px">${kwFoundHTML}</div>`:''}
         ${kwMissHTML?`<p style="font-size:10px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Add These</p><div class="keyword-wrap">${kwMissHTML}</div>`:''}
       </div>
     </div>
     ${atsHTML}
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:22px;font-size:12px;color:var(--muted);line-height:1.5;text-align:center">
+      🔒 This analysis was generated by AI and is advisory only. Your resume was not stored. &nbsp;·&nbsp; <a href="#" onclick="openPrivacyModal(event)" style="color:var(--accent);text-decoration:none">Privacy Policy</a>
+    </div>
   `;
 
   el.style.display = 'block';
@@ -1260,7 +1361,7 @@ function renderResults(r, role, level, geo) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   INIT — run when page loads
+   INIT
    ═══════════════════════════════════════════════════════ */
 window.addEventListener('load', initGoogleSignIn);
 </script>
