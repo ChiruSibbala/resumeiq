@@ -4,12 +4,8 @@
       "maxDuration": 30
     },
     "api/usage.js": {
-      "maxDuration": 10
-    }
-  },
-  "api": {
-    "bodyParser": {
-      "sizeLimit": "10mb"
+      "maxDuration": 10,
+      "runtime": "nodejs20.x"
     }
   }
 }
