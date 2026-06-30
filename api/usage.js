@@ -4,7 +4,7 @@
  * Tracks usage per Gmail — blocks incognito bypass
  */
 
-import { createClient } from 'redis';
+const { createClient } = require('redis');
 
 const ALLOWED_ORIGINS = [
   'https://resumeiq-gules-nine.vercel.app',
@@ -28,7 +28,7 @@ function getTodayUTC() {
   return new Date().toISOString().split('T')[0];
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const origin = req.headers.origin || '';
 
   if (!ALLOWED_ORIGINS.includes(origin)) {
@@ -61,7 +61,6 @@ export default async function handler(req, res) {
   try {
     const redis = await getClient();
 
-    // ── GET ──────────────────────────────────────────────
     if (action === 'get') {
       const [rawCount, rawPlan] = await Promise.all([
         redis.get(usageKey),
@@ -85,14 +84,12 @@ export default async function handler(req, res) {
       return res.status(200).json({ count, plan: activePlan, planExpiry });
     }
 
-    // ── INCREMENT ─────────────────────────────────────────
     if (action === 'increment') {
       const newCount = await redis.incr(usageKey);
-      await redis.expire(usageKey, 172800); // 48 hour expiry
+      await redis.expire(usageKey, 172800);
       return res.status(200).json({ count: newCount });
     }
 
-    // ── DECREMENT ─────────────────────────────────────────
     if (action === 'decrement') {
       const current = parseInt(await redis.get(usageKey) || '0', 10);
       if (current > 0) {
@@ -101,14 +98,13 @@ export default async function handler(req, res) {
       return res.status(200).json({ count: Math.max(0, current - 1) });
     }
 
-    // ── ACTIVATE PLAN ─────────────────────────────────────
     if (action === 'activate_plan') {
       if (!plan || !['basic', 'pro'].includes(plan)) {
         return res.status(400).json({ error: 'Invalid plan.' });
       }
       const expiry   = Date.now() + 24 * 60 * 60 * 1000;
       const planData = JSON.stringify({ plan, expiry });
-      await redis.set(planKey, planData, { EX: 90000 }); // 25 hour expiry
+      await redis.set(planKey, planData, { EX: 90000 });
       return res.status(200).json({ success: true, plan, expiry });
     }
 
@@ -116,7 +112,6 @@ export default async function handler(req, res) {
 
   } catch (err) {
     console.error('Redis error:', err.message);
-    // Never crash — return safe defaults
     return res.status(200).json({ count: 0, plan: null, planExpiry: null });
   }
-}
+};
