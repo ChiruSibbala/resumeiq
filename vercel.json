@@ -4,8 +4,7 @@
       "maxDuration": 30
     },
     "api/usage.js": {
-      "maxDuration": 10,
-      "runtime": "nodejs20.x"
+      "maxDuration": 10
     }
   }
 }
